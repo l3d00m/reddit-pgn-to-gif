@@ -4,9 +4,11 @@ import chess.svg
 import io
 import cairosvg
 import imageio
-from giphypop import upload
 import config
 import time
+import pyimgur
+
+im = pyimgur.Imgur(config.imgur_client_id)
 
 
 def convert_pgn_to_gif(pgn):
@@ -30,19 +32,19 @@ def convert_pgn_to_gif(pgn):
         counter += 1
     images.append(images[len(images) - 1])
     try:
-        imageio.mimsave("fast.gif", images, duration=1, format="GIF")
-        imageio.mimsave("slow.gif", images, duration=3, format="GIF")
+        imageio.mimsave("fast.mp4", images, duration=1, format="GIF-PIL")
+        imageio.mimsave("slow.mp4", images, duration=3, format="GIF-PIL")
     except Exception as e:
         print("error creating gif: " + format(e))
         return
 
     print("Generating gif took " + str(time.time() - start_time) + " s")
     try:
-        gif_slow = upload(["chess"], "slow.gif")
-        gif_fast = upload(["chess"], "fast.gif")
-        return [gif_slow.media_url, gif_fast.media_url]
+        gif_slow = im.upload_image("slow.mp4", title="/r/chess pgn to video")
+        gif_fast = im.upload_image("fast.mp4", title="/r/chess pgn to video")
+        return [gif_slow.link, gif_fast.link]
     except Exception as e:
-        print("error uploading on giphy: " + format(e))
+        print("error uploading on imgur: " + format(e))
         return
 
 

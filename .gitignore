@@ -80,7 +80,7 @@ venv.bak/
 out/
 
 # Custom
-fast.gif
-slow.gif
+fast.mp4
+slow.mp4
 output.png
 config.py

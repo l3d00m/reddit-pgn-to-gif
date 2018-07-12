@@ -4,5 +4,5 @@ reddit_username = ""
 reddit_password = ""
 subreddit = ""
 debug_subreddit = ""
-giphy_key = ""
+imgur_client_id = ""
 DEBUG = False
