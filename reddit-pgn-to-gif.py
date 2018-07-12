@@ -13,15 +13,26 @@ if config.DEBUG:
 while 1:
     posts = reddit.get_new_posts()
     for post in posts:
-        pgns = re.findall("\[pgn\\\\?\](.*?)\\\\?\[/pgn\\\\?\]", post[1], re.DOTALL | re.IGNORECASE)
+        reddit_object = post[0]
+        body = post[1]
+
+        pgns = re.findall("\[pgn\\\\?\](.*?)\\\\?\[/pgn\\\\?\]", body, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
             print("pgn(s) detected")
+            # Maximum 10 PGNs
             pgns = pgns[:11]
 
-            gif_urls = []
+            games = []
             for pgn in pgns:
                 print(pgn)
-                gif_urls.append(pgn2gif.convert_pgn_to_gif(pgn))
-            if len(gif_urls) > 0:
-                reddit.post_to_reddit(gif_urls, post[0])
+                try:
+                    gif_urls = pgn2gif.convert_pgn_to_gif(pgn)
+                except Exception as e:
+                    print("Unknown error converting gif: " + format(e))
+                    continue
+                if gif_urls is None:
+                    continue
+                games.append(gif_urls)
+            if len(games) > 0:
+                reddit.post_to_reddit(games, reddit_object)
     time.sleep(20)
