@@ -63,4 +63,6 @@ def post_to_reddit(games, reddit_object):
             "for a better experience.*"
     if config.DEBUG:
         print("replying with: " + text)
+    else:
+        print("Comment submitted")
     reddit_object.reply(text)

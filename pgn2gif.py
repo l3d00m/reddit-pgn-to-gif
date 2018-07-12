@@ -8,11 +8,9 @@ from giphypop import upload
 import config
 import time
 
-current_milli_time = lambda: int(round(time.time() * 1000))
-
 
 def convert_pgn_to_gif(pgn):
-    start_time = current_milli_time()
+    start_time = time.time()
     pgn_file = io.StringIO(str(pgn))
     game = chess.pgn.read_game(pgn_file)
     if game is None:
@@ -37,11 +35,11 @@ def convert_pgn_to_gif(pgn):
     except Exception as e:
         print("error creating gif: " + format(e))
         return
-    if config.DEBUG:
-        print("Took" + str(current_milli_time() - start_time) + "ms")
+
+    print("Generating gif took " + str(time.time() - start_time) + " s")
     try:
-        gif_slow = upload(["chess", "r/chess"], "slow.gif")
-        gif_fast = upload(["chess", "r/chess"], "fast.gif")
+        gif_slow = upload(["chess"], "slow.gif")
+        gif_fast = upload(["chess"], "fast.gif")
         return [gif_slow.media_url, gif_fast.media_url]
     except Exception as e:
         print("error uploading on giphy: " + format(e))

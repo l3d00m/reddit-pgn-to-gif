@@ -35,4 +35,4 @@ while 1:
                 games.append(gif_urls)
             if len(games) > 0:
                 reddit.post_to_reddit(games, reddit_object)
-    time.sleep(20)
+    time.sleep(30)
