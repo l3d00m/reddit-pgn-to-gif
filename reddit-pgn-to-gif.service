@@ -1,0 +1,14 @@
+[Unit]
+Description="chess PGN to gif on reddit"
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+Type=simple
+ExecStart=/home/pi/reddit-pgn-to-gif/reddit-pgn-to-gif.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/reddit-pgn-to-gif.iml" filepath="$PROJECT_DIR$/.idea/reddit-pgn-to-gif.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reddit-pgn-to-gif.iml" filepath="$PROJECT_DIR$/reddit-pgn-to-gif.iml" />
     </modules>
   </component>
 </project>
