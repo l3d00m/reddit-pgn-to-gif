@@ -18,8 +18,9 @@ def convert_pgn_to_gif(pgn):
     game = chess.pgn.read_game(pgn_file)
     if game is None:
         print("No valid PGN detected")
-        return
+        return False
     board = game.board()
+    
     images = [position_to_image(board)]
     counter = 0
     for move in game.main_line():
@@ -29,21 +30,34 @@ def convert_pgn_to_gif(pgn):
         if config.DEBUG:
             print("Move #" + str(counter))
         board.push(move)
-        images.append(position_to_image(board))
+        image = position_to_image(board)
+        if image is False:
+            return False
+        images.append(image)
         counter += 1
     images.append(images[len(images) - 1])
+    result = create_gifs(images)
+    if result is False:
+        return False
+    print("Generating gif took " + str(time.time() - start_time) + " s")
+    return upload_to_imgur()
+
+
+def create_gifs(images):
     try:
         imageio.mimsave("fast.gif", images, duration=1)
         imageio.mimsave("normal.gif", images, duration=2)
         imageio.mimsave("slow.gif", images, duration=4)
+        return True
     except Exception as e:
         if config.DEBUG:
             raise
         else:
             print("error creating gif: " + format(e))
-            return
+    return False
 
-    print("Generating gif took " + str(time.time() - start_time) + " s")
+
+def upload_to_imgur():
     try:
         im.refresh_access_token()
         gif_slow = im.upload_image("slow.gif", title="Slow speed")
@@ -56,11 +70,18 @@ def convert_pgn_to_gif(pgn):
             raise
         else:
             print("error uploading on imgur: " + format(e))
-            return
+    return False
 
 
 def position_to_image(board):
-    svg_string = chess.svg.board(board, size=400)
-    # noinspection PyUnresolvedReferences
-    byte_string = cairosvg.svg2png(bytestring=svg_string)
-    return imageio.imread(byte_string, format="PNG")
+    try:
+        svg_string = chess.svg.board(board, size=400)
+        # noinspection PyUnresolvedReferences
+        byte_string = cairosvg.svg2png(bytestring=svg_string)
+        return imageio.imread(byte_string, format="PNG")
+    except Exception as e:
+        if config.DEBUG:
+            raise
+        else:
+            print("error converting board to image: " + format(e))
+    return False

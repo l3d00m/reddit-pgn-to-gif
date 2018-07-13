@@ -16,7 +16,7 @@ while 1:
         reddit_object = post[0]
         body = post[1]
 
-        pgns = re.findall("\[pgn\\\\?\](.*?)\\\\?\[/pgn\\\\?\]", body, re.DOTALL | re.IGNORECASE)
+        pgns = re.findall("\[pgn\](.*?)\[/pgn\]", body, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
             print("pgn(s) detected")
             # Maximum 10 PGNs
@@ -24,7 +24,7 @@ while 1:
 
             games = []
             for pgn in pgns:
-                print(pgn)
+                print(pgn.encode('unicode_escape').decode('latin-1', 'ignore'))
                 try:
                     album_url = pgn2gif.convert_pgn_to_gif(pgn)
                 except Exception as e:
@@ -33,7 +33,7 @@ while 1:
                     else:
                         print("Unknown error converting gif: " + format(e))
                         continue
-                if album_url is None:
+                if album_url is None or album_url is False:
                     continue
                 games.append(album_url)
             if len(games) > 0:

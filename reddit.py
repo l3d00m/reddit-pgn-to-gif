@@ -10,6 +10,20 @@ reddit = praw.Reddit(client_id=config.reddit_client_id,
 already_checked = []
 
 
+def unescape_reddit(string):
+    try:
+        return str(string).replace("\\[", "[") \
+            .replace("\\]", "]") \
+            .replace("\\_", "_") \
+            .replace("\\*", "*") \
+            .replace("(", "") \
+            .replace(")", "") \
+            .replace("\n\n", "\n")
+    except Exception as e:
+        print("Couldn't unescape reddit string: " + format(e))
+        return str(string)
+
+
 def get_new_posts():
     to_return = []
     subr = reddit.subreddit(config.subreddit)
@@ -26,7 +40,7 @@ def get_new_posts():
                 print("Already checked")
             continue
         if submission.is_self and submission.selftext != "":
-            to_return.append([submission, str(submission.selftext)])
+            to_return.append([submission, unescape_reddit(submission.selftext)])
         already_checked.append(submission.name)
 
     for comment in subr.comments(limit=30):
@@ -36,7 +50,7 @@ def get_new_posts():
             if config.DEBUG:
                 print("Already checked")
             continue
-        to_return.append([comment, str(comment.body)])
+        to_return.append([comment, unescape_reddit(comment.body)])
         already_checked.append(comment.name)
     return to_return
 
@@ -55,7 +69,7 @@ def post_to_reddit(games, reddit_object):
         return False
 
     text += "*[Code](https://github.com/l3d00m/reddit-pgn-to-gif) | " \
-            "Contact `u/ganznetteigentlich` for questions  \n" \
+            "Contact u\\/ganznetteigentlich for questions  \n" \
             "Install the PGN Viewer addon for " \
             "[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/) or " \
             "[chrome](https://chrome.google.com/webstore/detail/reddit-pgn-viewer/hplecpnihkigeaiobbmfnfblepiadjdh) " \
