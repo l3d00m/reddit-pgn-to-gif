@@ -26,13 +26,16 @@ while 1:
             for pgn in pgns:
                 print(pgn)
                 try:
-                    gif_urls = pgn2gif.convert_pgn_to_gif(pgn)
+                    album_url = pgn2gif.convert_pgn_to_gif(pgn)
                 except Exception as e:
-                    print("Unknown error converting gif: " + format(e))
+                    if config.DEBUG:
+                        raise
+                    else:
+                        print("Unknown error converting gif: " + format(e))
+                        continue
+                if album_url is None:
                     continue
-                if gif_urls is None:
-                    continue
-                games.append(gif_urls)
+                games.append(album_url)
             if len(games) > 0:
                 reddit.post_to_reddit(games, reddit_object)
     time.sleep(30)

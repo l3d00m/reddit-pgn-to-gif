@@ -43,19 +43,18 @@ def get_new_posts():
 
 def post_to_reddit(games, reddit_object):
     if len(games) == 1:
-        text = "I've converted your PGN into a gif:\n\n"
-        text += "[Fast](" + games[0][1] + ")  \n"
-        text += "[Slow](" + games[0][0] + ")\n\n"
+        text = "[Here is a gif of your PGN](" + games[0] + ")"
     else:
-        text = "I've converted your PGNs into gifs:\n\n"
         i = 1
-        for gif_urls in games:
-            text += "PGN #" + str(i) + ":  \n"
-            text += "[Fast](" + gif_urls[1] + ")  \n"
-            text += "[Slow](" + gif_urls[0] + ")\n\n"
+        text = "I've converted your PGNs into gifs: \n\n "
+        for album_url in games:
+            text += "\n\n[Gif for PGN #" + str(i) + "](" + album_url + ")\n\n"
             i += 1
+    if text == "":
+        print("WARNING: text was empty, should never happen")
+        return False
 
-    text += "----\n\n*[Code](https://github.com/l3d00m/reddit-pgn-to-gif) | " \
+    text += "\n\n*[Code](https://github.com/l3d00m/reddit-pgn-to-gif) | " \
             "Contact `u/ganznetteigentlich` for questions.  \n" \
             "Install the PGN Viewer addon for " \
             "[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/) or " \
@@ -66,3 +65,4 @@ def post_to_reddit(games, reddit_object):
     else:
         print("Comment submitted")
     reddit_object.reply(text)
+    return True
