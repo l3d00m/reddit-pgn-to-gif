@@ -11,6 +11,8 @@ ExecStart=/home/pi/reddit-pgn-to-gif/reddit-pgn-to-gif.py
 Restart=always
 RestartSec=10
 Nice=19
+User=chessbot
+Group=chessbot
 
 [Install]
 WantedBy=multi-user.target
