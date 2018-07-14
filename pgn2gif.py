@@ -20,7 +20,6 @@ def convert_pgn_to_gif(pgn):
         print("No valid PGN detected")
         return False
     board = game.board()
-    
     images = [position_to_image(board)]
     counter = 0
     for move in game.main_line():
@@ -52,8 +51,7 @@ def create_gifs(images):
     except Exception as e:
         if config.DEBUG:
             raise
-        else:
-            print("error creating gif: " + format(e))
+        print("error creating gif: " + format(e))
     return False
 
 
@@ -68,8 +66,7 @@ def upload_to_imgur():
     except Exception as e:
         if config.DEBUG:
             raise
-        else:
-            print("error uploading on imgur: " + format(e))
+        print("error uploading on imgur: " + format(e))
     return False
 
 
@@ -82,6 +79,5 @@ def position_to_image(board):
     except Exception as e:
         if config.DEBUG:
             raise
-        else:
-            print("error converting board to image: " + format(e))
+        print("error converting board to image: " + format(e))
     return False
