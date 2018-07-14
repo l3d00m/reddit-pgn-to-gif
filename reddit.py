@@ -10,6 +10,13 @@ reddit = praw.Reddit(client_id=config.reddit_client_id,
 already_checked = []
 
 
+class Post:
+    def __init__(self, reddit_object, text, link):
+        self.reddit_object = reddit_object
+        self.text = text
+        self.link = link
+
+
 def unescape_reddit(string):
     try:
         return str(string).replace("\\[", "[") \
@@ -40,7 +47,8 @@ def get_new_posts():
                 print("Already checked")
             continue
         if submission.is_self and submission.selftext != "":
-            to_return.append([submission, unescape_reddit(submission.selftext)])
+            to_return.append(
+                Post(reddit_object=submission, text=unescape_reddit(submission.selftext), link=submission.permalink))
         already_checked.append(submission.name)
 
     for comment in subr.comments(limit=30):
@@ -50,19 +58,26 @@ def get_new_posts():
             if config.DEBUG:
                 print("Already checked")
             continue
-        to_return.append([comment, unescape_reddit(comment.body)])
+        to_return.append(Post(reddit_object=comment, text=unescape_reddit(comment.body), link=comment.permalink))
         already_checked.append(comment.name)
     return to_return
 
 
 def post_to_reddit(games, reddit_object):
     if len(games) == 1:
-        text = "[Here is a gif of your PGN](" + games[0] + ")\n\n"
+        game = games[0]
+        text = "[Here are gifs \(different speeds\) of your PGN](" + game.album_url + ")"
+        if game.lichess_url is not False:
+            text += " and the [lichess analysis board](" + game.lichess_url + ")"
+        text += "\n\n"
     else:
         i = 1
         text = "I've converted your PGNs into gifs: \n\n "
-        for album_url in games:
-            text += "[Gif for PGN #" + str(i) + "](" + album_url + ")\n\n"
+        for game in games:
+            text += "[Gifs \(different speeds\) for PGN #" + str(i) + "](" + game.album_url + ")"
+            if game.lichess_url is not False:
+                text += " and the [lichess analysis board](" + game.lichess_url + ")"
+            text += "\n\n"
             i += 1
     if text == "":
         print("WARNING: text was empty, should never happen")

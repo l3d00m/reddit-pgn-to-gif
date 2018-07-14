@@ -4,19 +4,24 @@ import re
 import time
 
 import config
-import pgn2gif
+from pgn2gif import convert_pgn_to_gif
 import reddit
+from pgn2lichess import pgn_to_lichess
 
 if config.DEBUG:
     config.subreddit = config.debug_subreddit
 
+
+class Game:
+    def __init__(self, album_url, lichess_url):
+        self.album_url = album_url
+        self.lichess_url = False if (lichess_url is None or lichess_url == "") else lichess_url
+
+
 while 1:
     posts = reddit.get_new_posts()
     for post in posts:
-        reddit_object = post[0]
-        body = post[1]
-
-        pgns = re.findall("\[pgn\](.*?)\[/pgn\]", body, re.DOTALL | re.IGNORECASE)
+        pgns = re.findall("\\[pgn\\](.*?)\\[/pgn\\]", post.text, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
             print("pgn(s) detected")
             # Maximum 10 PGNs
@@ -24,18 +29,19 @@ while 1:
 
             games = []
             for pgn in pgns:
-                print(pgn.encode('unicode_escape').decode('latin-1', 'ignore'))
+                print(pgn)
+                album_url = False
                 try:
-                    album_url = pgn2gif.convert_pgn_to_gif(pgn)
+                    album_url = convert_pgn_to_gif(pgn)
                 except Exception as e:
                     if config.DEBUG:
                         raise
-                    else:
-                        print("Unknown error converting gif: " + format(e))
-                        continue
+                    print("Unknown error converting gif: " + format(e))
                 if album_url is None or album_url is False:
                     continue
-                games.append(album_url)
+                lichess_url = pgn_to_lichess(pgn)
+                print(lichess_url)
+                games.append(Game(lichess_url=lichess_url, album_url=album_url))
             if len(games) > 0:
-                reddit.post_to_reddit(games, reddit_object)
+                reddit.post_to_reddit(games, post.reddit_object)
     time.sleep(30)
