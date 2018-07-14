@@ -70,17 +70,17 @@ def get_new_posts():
 def post_to_reddit(games, reddit_object):
     if len(games) == 1:
         game = games[0]
-        text = "[Here is a gif of your PGN](" + game.album_url + ")"
+        text = "[Here are gifs \(different speeds\) of your PGN](" + game.album_url + ")"
         if game.lichess_url is not False:
-            text += "  \n[Link to lichess analysis](" + game.lichess_url + ")"
+            text += " and the [lichess analysis board](" + game.lichess_url + ")"
         text += "\n\n"
     else:
         i = 1
         text = "I've converted your PGNs into gifs: \n\n "
         for game in games:
-            text += "[Gif for PGN #" + str(i) + "](" + game.album_url + ")"
+            text += "[Gifs \(different speeds\) for PGN #" + str(i) + "](" + game.album_url + ")"
             if game.lichess_url is not False:
-                text += "  \n[Link to lichess analysis](" + game.lichess_url + ")"
+                text += " and the [lichess analysis board](" + game.lichess_url + ")"
             text += "\n\n"
             i += 1
     if text == "":
