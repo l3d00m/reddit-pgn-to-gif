@@ -22,7 +22,7 @@ while 1:
     posts = reddit.get_new_posts()
     for post in posts:
         print(post.text)
-        pgns = re.findall("\\[pgn\\](.*?)\\[/pgn\\]", post.text, re.DOTALL | re.IGNORECASE)
+        pgns = re.findall("\[pgn\](.*?)\[/pgn\]", post.text, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
             print("pgn(s) detected")
             # Maximum 10 PGNs
