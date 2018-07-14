@@ -29,7 +29,6 @@ while 1:
 
             games = []
             for pgn in pgns:
-                pgn = pgn.encode('unicode')
                 print(pgn)
                 album_url = False
                 try:
