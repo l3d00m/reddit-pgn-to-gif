@@ -2,7 +2,6 @@ import chess
 import chess.pgn
 import chess.svg
 import io
-import cairosvg
 import imageio
 import config
 import time
@@ -19,15 +18,20 @@ def convert_pgn_to_gif(pgn):
     if game is None:
         print("No valid PGN detected")
         return False
+    if len(game.errors) > 0:
+        print("errors detected, aborting")
+        for error in game.errors:
+            print(error)
+        return False
     board = game.board()
     images = [position_to_image(board)]
     counter = 0
     for move in game.main_line():
-        if counter > 250:
+        if counter > 500:
             print("too many moves")
             break
         if config.DEBUG:
-            print("Move #" + str(counter))
+            print("Move #" + str(counter + 1))
         board.push(move)
         image = position_to_image(board)
         if image is False:

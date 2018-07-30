@@ -23,8 +23,6 @@ def unescape_reddit(string):
             .replace("\\]", "]") \
             .replace("\\_", "_") \
             .replace("\\*", "*") \
-            .replace("(", "") \
-            .replace(")", "") \
             .replace("\n\n", "\n")
     except Exception as e:
         print("Couldn't unescape reddit string: " + format(e))

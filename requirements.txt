@@ -1,3 +1,4 @@
+requests
 praw==5.4.0
 python-chess>=0.23.9
 cairosvg>=2.1.3

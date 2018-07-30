@@ -44,4 +44,6 @@ while 1:
                 games.append(Game(lichess_url=lichess_url, album_url=album_url))
             if len(games) > 0:
                 reddit.post_to_reddit(games, post.reddit_object)
+    if config.DEBUG:
+        break
     time.sleep(30)
