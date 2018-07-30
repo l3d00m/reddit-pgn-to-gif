@@ -3,6 +3,7 @@ import chess.pgn
 import chess.svg
 import io
 import imageio
+import cairosvg
 import config
 import time
 import pyimgur
@@ -77,7 +78,6 @@ def upload_to_imgur():
 def position_to_image(board):
     try:
         svg_string = chess.svg.board(board, size=400)
-        # noinspection PyUnresolvedReferences
         byte_string = cairosvg.svg2png(bytestring=svg_string)
         return imageio.imread(byte_string, format="PNG")
     except Exception as e:
