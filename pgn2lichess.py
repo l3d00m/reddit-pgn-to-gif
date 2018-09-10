@@ -9,7 +9,7 @@ def pgn_to_lichess(pgn):
         r = requests.post(LICHESS_URL, data={'pgn': pgn}, allow_redirects=False)
         result = r.headers.get("location")
         if result is not None and result != LICHESS_URL:
-            return "http://lichess.org" + result
+            return "https://lichess.org" + result
     except Exception as e:
         if config.DEBUG:
             raise
