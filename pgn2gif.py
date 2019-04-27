@@ -27,7 +27,7 @@ def convert_pgn_to_gif(pgn):
     board = game.board()
     images = [position_to_image(board)]
     counter = 0
-    for move in game.main_line():
+    for move in game.mainline_moves():
         if counter > 500:
             print("too many moves")
             break
