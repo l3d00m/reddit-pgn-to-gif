@@ -7,6 +7,8 @@
 * Outputs multiple speed variants as an imgur album
 * *Only the main line of a PGN is supported*
 
+Examples can be seen on reddit: http://reddit.com/u/PGNtoGIF 
+
 ## Build instructions
 
 1. Copy `config.default.py` to `config.py` and add your keys (for reddit and imgur)

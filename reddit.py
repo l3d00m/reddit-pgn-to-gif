@@ -64,29 +64,25 @@ def get_new_posts():
 def post_to_reddit(games, reddit_object):
     if len(games) == 1:
         game = games[0]
-        text = "[Here are gifs \(different speeds\) of your PGN](" + game.album_url + ")"
+        text = "I've converted your game into GIFs to make it viewable for mobile users: "
+        text += "[Here is the GIF in different playback speeds](" + game.album_url + ")"
         if game.lichess_url is not False:
-            text += " and the [lichess analysis board](" + game.lichess_url + ")"
+            text += " and also the [lichess analysis board](" + game.lichess_url + ")"
         text += "\n\n"
     else:
         i = 1
-        text = "I've converted your PGNs into gifs: \n\n "
+        text = "I've converted your games into GIFs to make them viewable for mobile users: \n\n "
         for game in games:
-            text += "[Gifs \(different speeds\) for PGN #" + str(i) + "](" + game.album_url + ")"
+            text += "[Gifs \(multiple playback speeds\) for game #" + str(i) + "](" + game.album_url + ")"
             if game.lichess_url is not False:
-                text += " and the [lichess analysis board](" + game.lichess_url + ")"
+                text += " and a [lichess analysis board](" + game.lichess_url + ")"
             text += "\n\n"
             i += 1
-    if text == "":
-        print("WARNING: text was empty, should never happen")
-        return False
-
-    text += "*[Code](https://github.com/l3d00m/reddit-pgn-to-gif) | " \
-            "Contact u\\/ganznetteigentlich for questions  \n" \
-            "Install the PGN Viewer addon for " \
-            "[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/) or " \
-            "[chrome](https://chrome.google.com/webstore/detail/reddit-pgn-viewer/hplecpnihkigeaiobbmfnfblepiadjdh) " \
-            "for a better experience.*"
+    text += "*Hint: I only plot the mainline without any included variations.*\n"
+    text += "***\n^[Code](https://github.com/l3d00m/reddit-pgn-to-gif)" \
+            "^(| Ping )^u\/ganznetteigentlich ^(for help |" \
+            "Install the **PGN Viewer addon** for) ^[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/)" \
+            "^or ^[chrome](https://chrome.google.com/webstore/detail/reddit-pgn-viewer/hplecpnihkigeaiobbmfnfblepiadjdh) ^(for the best experience.)"
     if config.DEBUG:
         print("replying with: " + text)
     else:
