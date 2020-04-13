@@ -64,14 +64,14 @@ def get_new_posts():
 def post_to_reddit(games, reddit_object):
     if len(games) == 1:
         game = games[0]
-        text = "I've converted your game into GIFs to make it viewable for mobile users: "
-        text += "[Here is the GIF in different playback speeds](" + game.album_url + ")"
+        text = "I converted your game into GIFs to make it viewable for mobile users. "
+        text += "[Game GIF in different playback speeds](" + game.album_url + ")"
         if game.lichess_url is not False:
             text += " and also the [lichess analysis board](" + game.lichess_url + ")"
         text += "\n\n"
     else:
         i = 1
-        text = "I've converted your games into GIFs to make them viewable for mobile users: \n\n "
+        text = "I converted your games into GIFs to make them viewable for mobile users: \n\n "
         for game in games:
             text += "[Gifs \(multiple playback speeds\) for game #" + str(i) + "](" + game.album_url + ")"
             if game.lichess_url is not False:
@@ -79,9 +79,9 @@ def post_to_reddit(games, reddit_object):
             text += "\n\n"
             i += 1
     text += "*Hint: I only plot the mainline without any included variations.*\n"
-    text += "***\n^[Code](https://github.com/l3d00m/reddit-pgn-to-gif)" \
+    text += "***\n^[Code](https://github.com/l3d00m/reddit-pgn-to-gif) " \
             "^(| Ping )^u\/ganznetteigentlich ^(for help |" \
-            "Install the **PGN Viewer addon** for) ^[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/)" \
+            "Install the **PGN Viewer addon** for) ^[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/) " \
             "^or ^[chrome](https://chrome.google.com/webstore/detail/reddit-pgn-viewer/hplecpnihkigeaiobbmfnfblepiadjdh) ^(for the best experience.)"
     if config.DEBUG:
         print("replying with: " + text)
