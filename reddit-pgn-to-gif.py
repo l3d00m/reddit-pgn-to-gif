@@ -24,8 +24,8 @@ while 1:
         pgns = re.findall("\\[pgn\\](.*?)\\[/pgn\\]", post.text, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
             print("pgn(s) detected")
-            # Maximum 10 PGNs
-            pgns = pgns[:11]
+            # Maximum 5 PGNs
+            pgns = pgns[:6]
 
             games = []
             for pgn in pgns:
