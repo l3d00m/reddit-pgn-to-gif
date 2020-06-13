@@ -12,6 +12,7 @@ Examples can be seen on reddit: http://reddit.com/u/PGNtoGIF
 
 ## Build instructions
 
-1. Copy `config.default.py` to `config.py` and add your keys (for reddit and imgur)
-2. Install dependencies with `pip3 install -r requirements.txt`
-3. Run the script with `./reddit-pgn-to-gif.py`
+1. Build [`lila-gif`](https://github.com/niklasf/lila-gif) and run it
+2. Copy `config.default.py` to `config.py` and add your keys (for reddit and imgur)
+3. Install dependencies with `pip3 install -r requirements.txt`
+4. Run the script with `./reddit-pgn-to-gif.py`
