@@ -17,15 +17,13 @@ def convert_pgn_to_gif(pgn):
     game = parse_pgn_to_game(pgn)
     if game is False:
         raise ValueError("Could not parse game")
-    request = create_lila_gif_request(game)
-    if request is False:
+    req_body = create_lila_gif_request(game)
+    if req_body is False:
         raise ValueError("Could not create lila gif request from moves")
+    make_lila_gif_request(req_body)
 
-    #result = create_gifs(frames)
-    # if result is False:
-    #    return False
-    #print("Generating gif took " + str(time.time() - start_time) + " s")
-    # return upload_to_imgur()
+    print("Generating gif took " + str(time.time() - start_time) + " s")
+    return upload_to_imgur()
 
 
 def create_lila_gif_request(game):
@@ -48,12 +46,8 @@ def create_lila_gif_request(game):
         board.push(move)
         frames.append(frame)
     req_body = {}
-    player_white = game.headers["White"]
-    player_black = game.headers["Black"]
-    if player_white != "?":
-        req_body["white"] = player_white
-    if player_black != "?":
-        req_body["black"] = player_black
+    req_body["white"] = game.headers["White"]
+    req_body["black"] = game.headers["Black"]
     if game.headers.get("StartFlipped", False) == "1":
         req_body["orientation"] = "black"
     req_body["comment"] = "https://reddit.com/u/PGNtoGIF"
@@ -62,18 +56,22 @@ def create_lila_gif_request(game):
 
 
 def make_lila_gif_request(req_body):
-    req_body["delay"] = 800
+    req_body["delay"] = 80
     req_fast = json.dumps(req_body)
-    req_body["delay"] = 2000
+    req_body["delay"] = 200
     req_slow = json.dumps(req_body)
     response_slow = requests.post(lila_gif_url, data=req_slow)
     if response_slow.ok:
-        with open("slow.jpg", 'wb') as f:
+        with open("slow.gif", 'wb') as f:
             f.write(response_slow.content)
+    else:
+        raise ConnectionError("Could not connect to lila-gif")
     response_fast = requests.post(lila_gif_url, data=req_fast)
     if response_fast.ok:
-        with open("fast.jpg", 'wb') as f:
+        with open("fast.gif", 'wb') as f:
             f.write(response_fast.content)
+    else:
+        raise ConnectionError("Could not connect to lila-gif")
 
 
 def parse_pgn_to_game(pgn):
@@ -94,9 +92,8 @@ def upload_to_imgur():
     try:
         im.refresh_access_token()
         gif_slow = im.upload_image("slow.gif", title="Slow speed")
-        gif_normal = im.upload_image("normal.gif", title="Normal speed")
         gif_fast = im.upload_image("fast.gif", title="Fast speed")
-        album = im.create_album("/r/chess PGN gifs", images=[gif_fast.id, gif_normal.id, gif_slow.id])
+        album = im.create_album("/r/chess PGN gifs", images=[gif_fast.id, gif_slow.id])
         return album.link
     except Exception as e:
         if config.DEBUG:
