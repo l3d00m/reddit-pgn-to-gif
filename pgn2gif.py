@@ -48,11 +48,20 @@ def convert_to_lila_gif_req(game):
     frames.append(frame)
 
     req_body = {}
-    req_body["white"] = game.headers["White"]
-    req_body["black"] = game.headers["Black"]
-    if game.headers.get("StartFlipped", False) == "1":
+    headers = game.headers
+    if headers.get("WhiteElo", False) is False:
+        req_body["white"] = headers["White"]
+    else:
+        req_body["white"] = '{} ({})'.format(headers["White"], headers["WhiteElo"])
+
+    if headers.get("BlackElo", False) is False:
+        req_body["black"] = headers["Black"]
+    else:
+        req_body["black"] = '{} ({})'.format(headers["Black"], headers["BlackElo"])
+        
+    if headers.get("StartFlipped", False) == "1":
         req_body["orientation"] = "black"
-    req_body["comment"] = "https://reddit.com/u/PGNtoGIF"
+    req_body["comment"] = headers.get("Site", "https://reddit.com/u/PGNtoGIF")
     req_body["frames"] = frames
     return req_body
 
@@ -106,5 +115,5 @@ def upload_to_imgur():
 
 if __name__ == "__main__":
     url = convert_pgn_to_gif(
-        "[Event \"Rated Bullet game\"]\r\n[StartFlipped \"1\"]\r\n[Date \"2020.04.21\"]\r\n[Round \"-\"]\r\n[Black \"someone\"]\r\n[Result \"0-1\"]\r\n[UTCDate \"2020.04.21\"]\r\n[UTCTime \"08:39:28\"]\r\n[WhiteElo \"1411\"]\r\n[BlackElo \"1436\"]\r\n[WhiteRatingDiff \"-10\"]\r\n[BlackRatingDiff \"+6\"]\r\n[Variant \"Standard\"]\r\n[TimeControl \"60+0\"]\r\n[ECO \"B45\"]\r\n[Opening \"Sicilian Defense: Paulsen Variation, Normal Variation\"]\r\n[Termination \"Time forfeit\"]\r\n[Annotator \"lichess.org\"]\r\n\r\n1. e4 e6 2. Nf3 c5 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 { B45 Sicilian Defense: Paulsen Variation, Normal Variation } g6 6. Bd3 Bg7 7. Be3 Nxd4 8. Bxd4 Bxd4 9. Bb5 Bg7 10. Qd2 Ne7 11. O-O-O O-O 12. Bxd7 Bxd7 13. Qxd7 Qxd7 14. Rxd7 Nc6 15. Rxb7 Na5 16. Rb5 Nc4 17. Rc5 Bxc3 18. Rxc4 Bg7 19. Rd1 Rfc8 20. Rxc8+ Rxc8 21. f4 e5 22. f5 gxf5 23. exf5 Bh6+ 24. Kb1 Kg7 25. h4 Kf6 26. g4 Bf4 27. g5+ Kg7 28. f6+ Kg6 29. Rf1 Rc4 30. Re1 Rd4 31. c3 Rd2 { Black wins on time. } 0-1")
+        "[Event \"Rated Bullet game\"]\r\n[StartFlipped \"1\"]\r\n[Date \"2020.04.21\"]\r\n[Round \"-\"]\r\n[Black \"GM someone\"]\r\n[Result \"0-1\"]\r\n[UTCDate \"2020.04.21\"]\r\n[UTCTime \"08:39:28\"]\r\n[WhiteElo \"1411\"]\r\n[WhiteRatingDiff \"-10\"]\r\n[BlackRatingDiff \"+6\"]\r\n[Variant \"Standard\"]\r\n[TimeControl \"60+0\"]\r\n[ECO \"B45\"]\r\n[Opening \"Sicilian Defense: Paulsen Variation, Normal Variation\"]\r\n[Termination \"Time forfeit\"]\r\n[Annotator \"lichess.org\"]\r\n\r\n1. e4 e6 2. Nf3 c5 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 { B45 Sicilian Defense: Paulsen Variation, Normal Variation } g6 6. Bd3 Bg7 7. Be3 Nxd4 8. Bxd4 Bxd4 9. Bb5 Bg7 10. Qd2 Ne7 11. O-O-O O-O 12. Bxd7 Bxd7 13. Qxd7 Qxd7 14. Rxd7 Nc6 15. Rxb7 Na5 16. Rb5 Nc4 17. Rc5 Bxc3 18. Rxc4 Bg7 19. Rd1 Rfc8 20. Rxc8+ Rxc8 21. f4 e5 22. f5 gxf5 23. exf5 Bh6+ 24. Kb1 Kg7 25. h4 Kf6 26. g4 Bf4 27. g5+ Kg7 28. f6+ Kg6 29. Rf1 Rc4 30. Re1 Rd4 31. c3 Rd2 { Black wins on time. } 0-1")
     print(url)
