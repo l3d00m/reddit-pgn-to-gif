@@ -4,6 +4,7 @@
 
 * Supports multiple PGN tags in a single post or comment
 * Uses [`python-chess`](https://github.com/niklasf/python-chess) which has a lax PGN parsing
+* Conversion to GIF using [`lila-gif`](https://github.com/niklasf/lila-gif) (with the nice lichess chess board theme)
 * Outputs multiple speed variants as an imgur album
 * *Only the main line of a PGN is supported*
 

@@ -1,50 +1,47 @@
 import chess
 import chess.pgn
 import io
-import config
-import time
 import pyimgur
 import json
 import requests
 
+import config
+
 im = pyimgur.Imgur(client_id=config.imgur_client_id, client_secret=config.imgur_client_secret)
 im.refresh_token = config.imgur_refresh_token
-lila_gif_url = "http://127.0.0.1:6175/game.gif"
 
 
 def convert_pgn_to_gif(pgn):
-    start_time = time.time()
     game = parse_pgn_to_game(pgn)
     if game is False:
         raise ValueError("Could not parse game")
-    req_body = create_lila_gif_request(game)
+    req_body = convert_to_lila_gif_req(game)
     if req_body is False:
         raise ValueError("Could not create lila gif request from moves")
     make_lila_gif_request(req_body)
 
-    print("Generating gif took " + str(time.time() - start_time) + " s")
     return upload_to_imgur()
 
 
-def create_lila_gif_request(game):
+def convert_to_lila_gif_req(game):
     board = game.board()
     frames = list()
     last_move = False
     for i, move in enumerate(game.mainline_moves()):
-        frame = {}
         if i > 1000:
             print("Too many moves")
             break
-        if config.DEBUG:
-            print("Move #" + str(i))
+
+        frame = {}
         if last_move is not False:
             frame["lastMove"] = last_move
-
         frame["fen"] = board.fen()
         frame["check"] = board.is_check()
         last_move = move.uci()
+
         board.push(move)
         frames.append(frame)
+
     req_body = {}
     req_body["white"] = game.headers["White"]
     req_body["black"] = game.headers["Black"]
@@ -60,13 +57,13 @@ def make_lila_gif_request(req_body):
     req_fast = json.dumps(req_body)
     req_body["delay"] = 200
     req_slow = json.dumps(req_body)
-    response_slow = requests.post(lila_gif_url, data=req_slow)
+    response_slow = requests.post(config.lila_gif_url, data=req_slow)
     if response_slow.ok:
         with open("slow.gif", 'wb') as f:
             f.write(response_slow.content)
     else:
         raise ConnectionError("Could not connect to lila-gif")
-    response_fast = requests.post(lila_gif_url, data=req_fast)
+    response_fast = requests.post(config.lila_gif_url, data=req_fast)
     if response_fast.ok:
         with open("fast.gif", 'wb') as f:
             f.write(response_fast.content)

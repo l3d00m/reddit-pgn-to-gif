@@ -45,8 +45,7 @@ def get_new_posts():
                 print("Already checked")
             continue
         if submission.is_self and submission.selftext != "":
-            to_return.append(
-                Post(reddit_object=submission, text=unescape_reddit(submission.selftext), link=submission.permalink))
+            to_return.append(Post(reddit_object=submission, text=unescape_reddit(submission.selftext), link=submission.permalink))
         already_checked.append(submission.name)
 
     for comment in subr.comments(limit=30):
@@ -80,11 +79,11 @@ def post_to_reddit(games, reddit_object):
             i += 1
     text += "*Hint: I only plot the mainline without any included variations.*\n"
     text += "***\n^[Code](https://github.com/l3d00m/reddit-pgn-to-gif) " \
-            "^(| Ping )^u\/ganznetteigentlich ^(for help | " \
+            "^(| Ping )^@ganznetteigentlich ^(for help | " \
             "Install the **PGN Viewer addon** for) ^[firefox](https://addons.mozilla.org/en-US/firefox/addon/reddit-pgn-viewer/) " \
             "^or ^[chrome](https://chrome.google.com/webstore/detail/reddit-pgn-viewer/hplecpnihkigeaiobbmfnfblepiadjdh) ^(for the best experience.)"
     if config.DEBUG:
-        print("replying with: " + text)
+        print("replying with: " + repr(text))
     else:
         print("Comment submitted")
     reddit_object.reply(text)

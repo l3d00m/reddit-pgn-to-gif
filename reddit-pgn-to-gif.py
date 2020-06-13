@@ -23,19 +23,19 @@ while 1:
     for post in posts:
         pgns = re.findall("\\[pgn\\](.*?)\\[/pgn\\]", post.text, re.DOTALL | re.IGNORECASE)
         if len(pgns) > 0:
-            print("pgn(s) detected")
-            # Maximum 5 PGNs
+            print("Pgn(s) detected")
+            # Max5 PGNs
             pgns = pgns[:6]
 
             games = []
             for pgn in pgns:
-                print(pgn)
+                print(repr(pgn))
                 album_url = False
                 try:
                     album_url = convert_pgn_to_gif(pgn)
                 except Exception as e:
                     if config.DEBUG:
-                        raise
+                        raise e
                     print("Unknown error converting gif: " + format(e))
                 if album_url is None or album_url is False:
                     continue
