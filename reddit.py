@@ -49,7 +49,7 @@ def get_new_posts():
         already_checked.append(submission.name)
 
     for comment in subr.comments(limit=30):
-        if comment.author.name.lower() == config.reddit_username.lower():
+        if comment.author is not None and comment.author.name.lower() == config.reddit_username.lower():
             continue
         if comment.name in already_checked:
             if config.DEBUG:

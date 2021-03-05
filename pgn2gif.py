@@ -63,6 +63,7 @@ def convert_to_lila_gif_req(game):
         req_body["orientation"] = "black"
     req_body["comment"] = headers.get("Site", "https://reddit.com/u/PGNtoGIF")
     req_body["frames"] = frames
+    req_body["bork"] = False
     return req_body
 
 
