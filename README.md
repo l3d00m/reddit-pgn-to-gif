@@ -1,5 +1,9 @@
 # Reddit: PGN to gif converter
 
+# ARCHIVED
+
+This repo has been archived. I am no longer hosting nor maintaining this bot, because noone really uses PGN anymore in /r/chess. Feel free to fork it or mail me for questions.
+
 *Converts PGN in `[pgn][/pgn]` tags from http://reddit.com/r/chess (among other subreddits) into gifs hosted on imgur and to a [lichess analysis board](https://lichess.org/analysis). It comments the links as a reply on reddit.*
 
 * Supports multiple PGN tags in a single post or comment
